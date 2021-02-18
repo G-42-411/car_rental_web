@@ -4,18 +4,50 @@
             <div class="logo">
             </div>
             <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-                <a-menu-item key="1">
-                    <a-icon type="user"/>
-                    <span>人员</span>
-                </a-menu-item>
-                <a-menu-item key="2">
-                    <a-icon type="car" />
-                    <span>车辆</span>
-                </a-menu-item>
-                <a-menu-item key="3">
-                    <a-icon type="solution" />
-                    <span>订单</span>
-                </a-menu-item>
+                <a-sub-menu key="1">
+                    <span slot="title"><a-icon type="user" /><span>人员</span></span>
+                    <a-menu-item key="11">
+                        <a-icon type="car"/>
+                        <span>人员信息</span>
+                    </a-menu-item>
+                    <a-menu-item key="12">
+                        <a-icon type="car"/>
+                        <span>人员管理</span>
+                    </a-menu-item>
+                </a-sub-menu>
+                <a-sub-menu key="2">
+                    <span slot="title"><a-icon type="car" /><span>车辆</span></span>
+                    <a-menu-item key="21">
+                        <a-icon type="car"/>
+                        <span>车辆信息</span>
+                    </a-menu-item>
+                    <a-menu-item key="22">
+                        <a-icon type="car"/>
+                        <span>出车</span>
+                    </a-menu-item>
+                    <a-menu-item key="23">
+                        <a-icon type="car"/>
+                        <span>还车</span>
+                    </a-menu-item>
+                </a-sub-menu>
+                <a-sub-menu key="3">
+                    <span slot="title"><a-icon type="solution" /><span>订单</span></span>
+                    <a-menu-item key="31">
+                        <a-icon type="car"/>
+                        <span>订单详情</span>
+                    </a-menu-item>
+                </a-sub-menu>
+                <a-sub-menu key="4">
+                    <span slot="title"><a-icon type="solution" /><span>门店</span></span>
+                    <a-menu-item key="41">
+                        <a-icon type="car"/>
+                        <span>门店列表</span>
+                    </a-menu-item>
+                    <a-menu-item key="42">
+                        <a-icon type="car"/>
+                        <span>新增门店</span>
+                    </a-menu-item>
+                </a-sub-menu>
             </a-menu>
         </a-layout-sider>
         <a-layout>

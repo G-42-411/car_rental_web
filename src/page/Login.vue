@@ -31,15 +31,18 @@
                 if (!this.checkContent()) {
                     return;
                 }
-                console.log("成功")
-                login({
+                const obj = {
                     username: this.username,
                     password: this.password
-                }).then(res => {
-                    let token = res.data.token
-                    Cookie.set('token', token)
+                }
+                login(obj).then(res => {
+                    if (res.code === 200) {
+                        let token = res.data.token
+                        Cookie.set('token', token)
+                        this.$router.push({path: '/main'})
+                    }
                 }).catch(err => {
-
+                    console.log(err)
                 })
 
             },

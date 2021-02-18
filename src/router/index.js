@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../page/Login'
+import Login from '@/page/Login'
+import Main from '@/page/Main'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ export default new VueRouter({
             path: '/',
             name: 'Login',
             component: Login
+        },
+        {
+            path: '/main',
+            name: 'Main',
+            component: Main
         }
     ]
 });
