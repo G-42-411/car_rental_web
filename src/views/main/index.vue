@@ -4,66 +4,32 @@
             <div class="logo">
             </div>
             <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-                <a-sub-menu key="1">
-                    <span slot="title"><a-icon type="user" /><span>人员</span></span>
-                    <a-menu-item key="11">
-                        <a-icon type="car"/>
-                        <span>人员信息</span>
-                    </a-menu-item>
-                    <a-menu-item key="12">
-                        <a-icon type="car"/>
-                        <span>人员管理</span>
-                    </a-menu-item>
-                </a-sub-menu>
-                <a-sub-menu key="2">
-                    <span slot="title"><a-icon type="car" /><span>车辆</span></span>
-                    <a-menu-item key="21">
-                        <a-icon type="car"/>
-                        <span>车辆信息</span>
-                    </a-menu-item>
-                    <a-menu-item key="22">
-                        <a-icon type="car"/>
-                        <span>出车</span>
-                    </a-menu-item>
-                    <a-menu-item key="23">
-                        <a-icon type="car"/>
-                        <span>还车</span>
-                    </a-menu-item>
-                </a-sub-menu>
-                <a-sub-menu key="3">
-                    <span slot="title"><a-icon type="solution" /><span>订单</span></span>
-                    <a-menu-item key="31">
-                        <a-icon type="car"/>
-                        <span>订单详情</span>
-                    </a-menu-item>
-                </a-sub-menu>
-                <a-sub-menu key="4">
-                    <span slot="title"><a-icon type="solution" /><span>门店</span></span>
-                    <a-menu-item key="41">
-                        <a-icon type="car"/>
-                        <span>门店列表</span>
-                    </a-menu-item>
-                    <a-menu-item key="42">
-                        <a-icon type="car"/>
-                        <span>新增门店</span>
+                <a-sub-menu v-for="(item, i) in menus" :key="i">
+                    <span slot="title"><a-icon :type="item.iconCls"/><span>{{item.nameZh}}</span></span>
+
+                    <a-menu-item @click="goto(child.path)" v-for="(child, j) in item.children" :key=" '' + i +j " v-if="child.mate.show === 1">
+                        <a-icon :type="child.iconCls"/>
+                        <span>{{child.nameZh}}</span>
                     </a-menu-item>
                 </a-sub-menu>
             </a-menu>
+
+
         </a-layout-sider>
         <a-layout>
             <a-layout-header class="header" style="background: #fff; padding: 0">
                 <a-icon class="trigger"
                         :type="menuFold"
                         @click="toZoom"/>
-                <div class="user-info">
-                    <a-avatar class="user-avatar" icon="user"/>
-                    <span class="user-name">成语利息</span>
-                </div>
 
+                <div class="user-info">
+                    <a-avatar class="user-avatar" :src="$store.state.userInfo.avatar"/>
+                    <span class="user-name">{{$store.state.userInfo.name}}</span>
+                    <span class="len">|</span>
+                    <span class="sign-out" @click="signOut">退出</span>
+                </div>
             </a-layout-header>
             <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
-                Content
-                <router-link to="/main">Main</router-link>
                 <router-view/>
             </a-layout-content>
         </a-layout>
@@ -71,7 +37,8 @@
 </template>
 
 <script>
-
+    import {getUserInfo} from "@/api/api";
+    import Cookie from 'js-cookie'
     export default {
         name: 'App',
         data() {
@@ -82,18 +49,44 @@
         methods: {
             toZoom() {
                 return this.collapsed = !this.collapsed;
+            },
+            goto(url){
+                this.$router.push({path: url})
+            },
+            signOut(){
+                Cookie.remove('token');
+                this.$router.push({path: '/login'})
             }
         },
         computed: {
             menuFold() {
                 return this.collapsed ? 'menu-unfold' : 'menu-fold';
+            },
+            menus() {
+                return this.$store.state.menus
+            },
+            currentPath() {
+                return this.$route.path
             }
+
         },
-        components: {}
+        components: {},
+        created: function () {
+            getUserInfo(this.$store.state.userInfo.username).then(res => {
+                this.$store.commit('setUserInfo', res.data.user)
+                this.$store.commit('setAuthorities', res.data.authorities)
+            })
+        }
+
     }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
+    a {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.65);
+    }
+
     #components-layout-demo-custom-trigger {
         height: 100vh;
 
@@ -132,6 +125,12 @@
 
                 .user-name {
                     margin-left: 10px;
+                }
+                .len{
+                    margin: 0 10px;
+                }
+                .sign-out{
+                    cursor: pointer;
                 }
             }
         }

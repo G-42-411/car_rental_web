@@ -35,10 +35,13 @@
                     username: this.username,
                     password: this.password
                 }
+                //半个小时后过期
+                const inFifteenMinutes = new Date(new Date().getTime() + 30 * 60 * 1000)
                 login(obj).then(res => {
-                    if (res.code === 200) {
+                    if (res.status === 200) {
                         let token = res.data.token
-                        Cookie.set('token', token)
+                        Cookie.set('token', token, {expires: inFifteenMinutes})
+                        this.$store.commit('setUserInfo', obj)
                         this.$router.push({path: '/main'})
                     }
                 }).catch(err => {
@@ -57,7 +60,13 @@
                     flag = false
                 }
                 return flag
+            },
+            popstate() {
+                history.pushState(null, null, "/login")
             }
+        },
+        created(){
+            window.addEventListener("popstate", this.popstate, false)
         }
     }
 </script>

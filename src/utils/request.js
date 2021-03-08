@@ -16,9 +16,6 @@ request.interceptors.request.use(config => {
         token = 'Bearer ' + token
         config.headers.Authorization = token
     }
-    config.headers = {
-        'Content-Type': 'application/json',
-    }
     return config
 }, (err) => {
     return Promise.reject(err)
